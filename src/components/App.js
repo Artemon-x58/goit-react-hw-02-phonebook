@@ -1,6 +1,7 @@
 import React from 'react';
 import { ContactsList } from './ContactsList/ContsctsList';
 import { Form } from './Form/Form';
+import { nanoid } from 'nanoid/non-secure';
 
 export class App extends React.Component {
   state = {
@@ -13,10 +14,25 @@ export class App extends React.Component {
     filter: '',
   };
 
+  handleAddContact = e => {
+    e.preventDefault();
+    const number = e.currentTarget.number.value;
+    const name = e.currentTarget.name.value;
+    const newContact = {
+      id: nanoid(),
+      name: name,
+      number: number,
+    };
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, newContact],
+    }));
+    e.currentTarget.reset();
+  };
+
   render() {
     return (
       <div>
-        <Form />
+        <Form add={this.handleAddContact} />
         <ContactsList contactsState={this.state.contacts} />
       </div>
     );

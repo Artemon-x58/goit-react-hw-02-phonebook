@@ -1,6 +1,8 @@
 import React from 'react';
 import { List, Title } from './ContactsList.styled';
-import { Item } from 'components/ListItem/ListItem.styled';
+
+import { Filter } from 'components/Filter/Filter';
+import { ListItem } from 'components/ListItem/ListItem';
 
 export class ContactsList extends React.Component {
   state = {
@@ -10,14 +12,15 @@ export class ContactsList extends React.Component {
 
   render() {
     return (
-      <List>
-        <Title>Contacts</Title>{' '}
-        {this.props.contactsState.map(contact => (
-          <Item key={contact.id}>
-            {contact.name}: {contact.number}
-          </Item>
-        ))}
-      </List>
+      <>
+        <Title>Contacts</Title>
+        <Filter />
+        <List>
+          {this.props.contactsState.map(contact => (
+            <ListItem key={contact.id} contact={contact} />
+          ))}
+        </List>
+      </>
     );
   }
 }

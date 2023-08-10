@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { ContactsList } from './ContactsList/ContsctsList';
 import { Form } from './Form/Form';
 import { nanoid } from 'nanoid/non-secure';
@@ -14,18 +15,48 @@ export class App extends React.Component {
     filter: '',
   };
 
+  filterContacts = newFilter => {
+    this.setState({
+      filter: newFilter,
+    });
+  };
+
+  createFilterList = () => {
+    const { filter, contacts } = this.state;
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  };
+
+  deleteContact = id => {
+    const newArray = this.state.contacts.filter(contact => contact.id !== id);
+    this.setState({
+      contacts: newArray,
+    });
+  };
+
   handleAddContact = e => {
     e.preventDefault();
     const number = e.currentTarget.number.value;
     const name = e.currentTarget.name.value;
-    const newContact = {
-      id: nanoid(),
-      name: name,
-      number: number,
-    };
-    this.setState(prevState => ({
-      contacts: [...prevState.contacts, newContact],
-    }));
+    const contactExists = this.state.contacts.some(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (contactExists) {
+      alert(`${name} is already in contacts`);
+    } else {
+      const newContact = {
+        id: nanoid(),
+        name: name,
+        number: number,
+      };
+
+      this.setState(prevState => ({
+        contacts: [...prevState.contacts, newContact],
+      }));
+    }
+
     e.currentTarget.reset();
   };
 
@@ -33,7 +64,11 @@ export class App extends React.Component {
     return (
       <div>
         <Form add={this.handleAddContact} />
-        <ContactsList contactsState={this.state.contacts} />
+        <ContactsList
+          contactsState={this.createFilterList()}
+          filterChange={this.filterContacts}
+          deleteContact={this.deleteContact}
+        />
       </div>
     );
   }

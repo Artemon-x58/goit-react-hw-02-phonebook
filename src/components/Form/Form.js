@@ -8,7 +8,13 @@ const idNumber = nanoid();
 
 export const Form = ({ add }) => {
   return (
-    <Forma onSubmit={add}>
+    <Forma
+      onSubmit={e => {
+        e.preventDefault();
+        add(e);
+        e.currentTarget.reset();
+      }}
+    >
       <Label htmlFor={idName}>
         Name
         <Input

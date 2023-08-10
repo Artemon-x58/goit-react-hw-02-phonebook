@@ -1,19 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { List, Title } from './ContactsList.styled';
-
-import { Filter } from 'components/Filter/Filter';
 import { ListItem } from 'components/ListItem/ListItem';
 
-export const ContactsList = ({
-  contactsState,
-  filterChange,
-  deleteContact,
-}) => {
+export const ContactsList = ({ contactsState, deleteContact }) => {
   return (
     <>
       <Title>Contacts</Title>
-      <Filter onChange={filterChange} />
       <List>
         {contactsState.map(contact => (
           <ListItem
@@ -35,6 +28,5 @@ ContactsList.propTypes = {
       number: PropTypes.string.isRequired,
     })
   ).isRequired,
-  filterChange: PropTypes.func.isRequired,
   deleteContact: PropTypes.func.isRequired,
 };

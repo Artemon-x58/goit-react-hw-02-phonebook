@@ -2,6 +2,7 @@ import React from 'react';
 import { ContactsList } from './ContactsList/ContsctsList';
 import { Form } from './Form/Form';
 import { nanoid } from 'nanoid/non-secure';
+import { Filter } from './Filter/Filter';
 
 export class App extends React.Component {
   state = {
@@ -20,7 +21,7 @@ export class App extends React.Component {
     });
   };
 
-  createFilterList = () => {
+  getFilterAddContact = () => {
     const { filter, contacts } = this.state;
     return contacts.filter(contact =>
       contact.name.toLowerCase().includes(filter.toLowerCase())
@@ -28,14 +29,12 @@ export class App extends React.Component {
   };
 
   deleteContact = id => {
-    const newArray = this.state.contacts.filter(contact => contact.id !== id);
-    this.setState({
-      contacts: newArray,
-    });
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
+    }));
   };
 
   handleAddContact = e => {
-    e.preventDefault();
     const number = e.currentTarget.number.value;
     const name = e.currentTarget.name.value;
     const contactExists = this.state.contacts.some(
@@ -44,28 +43,27 @@ export class App extends React.Component {
 
     if (contactExists) {
       alert(`${name} is already in contacts`);
-    } else {
-      const newContact = {
-        id: nanoid(),
-        name: name,
-        number: number,
-      };
-
-      this.setState(prevState => ({
-        contacts: [...prevState.contacts, newContact],
-      }));
+      return;
     }
-
-    e.currentTarget.reset();
+    const newContact = {
+      id: nanoid(),
+      name: name,
+      number: number,
+    };
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, newContact],
+    }));
   };
 
   render() {
     return (
       <div>
+        <h1>Phonebook</h1>
         <Form add={this.handleAddContact} />
+        <h2>Contacts</h2>
+        <Filter onChange={this.filterContacts} />
         <ContactsList
-          contactsState={this.createFilterList()}
-          filterChange={this.filterContacts}
+          contactsState={this.getFilterAddContact()}
           deleteContact={this.deleteContact}
         />
       </div>

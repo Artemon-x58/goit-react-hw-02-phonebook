@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { ContactsList } from './ContactsList/ContsctsList';
 import { Form } from './Form/Form';
 import { nanoid } from 'nanoid/non-secure';

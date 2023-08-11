@@ -1,6 +1,6 @@
 import React from 'react';
 import { ContactsList } from './ContactsList/ContsctsList';
-import { Form } from './Form/Form';
+import { FormComponent } from './Form/Form';
 import { nanoid } from 'nanoid/non-secure';
 import { Filter } from './Filter/Filter';
 
@@ -34,9 +34,7 @@ export class App extends React.Component {
     }));
   };
 
-  handleAddContact = e => {
-    const number = e.currentTarget.number.value;
-    const name = e.currentTarget.name.value;
+  handleAddContact = (name, number) => {
     const contactExists = this.state.contacts.some(
       contact => contact.name.toLowerCase() === name.toLowerCase()
     );
@@ -59,7 +57,7 @@ export class App extends React.Component {
     return (
       <div>
         <h1>Phonebook</h1>
-        <Form add={this.handleAddContact} />
+        <FormComponent addContact={this.handleAddContact} />
         <h2>Contacts</h2>
         <Filter onChange={this.filterContacts} />
         <ContactsList
